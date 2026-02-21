@@ -1,0 +1,21 @@
+name: CodeMate AI Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  notify-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send PR data to backend
+        run: |
+          curl -X POST ${{ secrets.WEBHOOK_URL }} \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repository": {
+              "full_name": "${{ github.repository }}"
+            },
+            "number": ${{ github.event.pull_request.number }}
+          }'
